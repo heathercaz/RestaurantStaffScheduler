@@ -50,11 +50,10 @@ class StaffMember
     public function getDetails(): string
     {
         $contact_info_str = implode(', ', $this->contact_info);
-        // $shifts_str = implode(', ', $this->shifts);
+        
         $shifts_str = '';
-        $shift_day = '';
         foreach ($this->shifts as $shift) {
-            $shift_day = $shift->getDay();
+            $shift_day = $shift->day;
             $shifts_str .= "$shift_day shift: $shift\n";
         }
         return "Name: {$this->name}, Role: {$this->role}, Contact: {$contact_info_str},\nShifts:\n{$shifts_str}";
@@ -69,17 +68,41 @@ class StaffMember
         $this->shifts = $shifts;
     }
 
+    /**
+     * Assigns a shift to the staff member.
+     * 
+     * @param Shift $shift
+     * @return string
+     */
     public function assignShift(Shift $shift): string
     {
-        $this->shifts[$shift->day] = $shift;
+        if (!isset($this->shifts[$shift->day])) {
+            $this->shifts[$shift->day] = $shift;
+        }
+        else{
+            return "{$this->name} already has a shift on {$shift->day}.";
+        }
+
         return "{$this->name} has been assigned to a shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
     }
 
+    /**
+     * Removes a shift from the staff member.
+     * 
+     * @param Shift $shift
+     * @return string
+     */
+
     public function removeShift(Shift $shift): string
     {
-        echo "$shift->day\n";
-        unset($this->shifts[$shift->day]);
-        return "{$this->name} has been removed from the shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
+        
+        if (!isset($this->shifts[$shift->day])) {
+            return "{$this->name} has no shift on {$shift->day}.";
+        }
+        else{
+            return "{$this->name} has been removed from the shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
+        }
+        
     }
 
     public function __toString(): string

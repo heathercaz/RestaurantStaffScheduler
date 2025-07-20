@@ -44,9 +44,13 @@ class RestaurantSchedulerTestbench
         // Remove a shift from the staff member
         $staff1->removeShift($shift1);
 
+
         echo "StaffMember after removing a shift:\n";
         echo $staff1->getDetails() . "\n";  
 
+        //Remove a shift from the staff member that doesn't exist
+        echo "Try removing non-existant shift:\n";
+        echo $staff1->removeShift($shift1);
 
 
     }
