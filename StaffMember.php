@@ -52,10 +52,10 @@ class StaffMember
         $contact_info_str = implode(', ', $this->contact_info);
         // $shifts_str = implode(', ', $this->shifts);
         $shifts_str = '';
-        $i = 1;
+        $shift_day = '';
         foreach ($this->shifts as $shift) {
-            $shifts_str .= "Shift $i $shift\n";
-            $i++;
+            $shift_day = $shift->getDay();
+            $shifts_str .= "$shift_day shift: $shift\n";
         }
         return "Name: {$this->name}, Role: {$this->role}, Contact: {$contact_info_str},\nShifts:\n{$shifts_str}";
 
@@ -71,8 +71,15 @@ class StaffMember
 
     public function assignShift(Shift $shift): string
     {
-        $this->shifts[] = $shift;
+        $this->shifts[$shift->day] = $shift;
         return "{$this->name} has been assigned to a shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
+    }
+
+    public function removeShift(Shift $shift): string
+    {
+        echo "$shift->day\n";
+        unset($this->shifts[$shift->day]);
+        return "{$this->name} has been removed from the shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
     }
 
     public function __toString(): string
