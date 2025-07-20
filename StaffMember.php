@@ -78,12 +78,19 @@ class StaffMember
     {
         if (!isset($this->shifts[$shift->day])) {
             $this->shifts[$shift->day] = $shift;
+            return "{$this->name} has been assigned to a shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
+        } else {
+            // Prompt for overwrite
+            echo "{$this->name} already has a shift on {$shift->day}. Overwrite? (y/n): ";
+            $handle = fopen ("php://stdin","r");
+            $line = trim(fgets($handle));
+            if (strtolower($line) === 'y') {
+                $this->shifts[$shift->day] = $shift;
+                return "Shift on {$shift->day} has been overwritten for {$this->name}.";
+            } else {
+                return "No changes made. {$this->name} still has the original shift on {$shift->day}.";
+            }
         }
-        else{
-            return "{$this->name} already has a shift on {$shift->day}.";
-        }
-
-        return "{$this->name} has been assigned to a shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
     }
 
     /**

@@ -52,6 +52,13 @@ class RestaurantSchedulerTestbench
         echo "Try removing non-existant shift:\n";
         echo $staff1->removeShift($shift1);
 
+        //Add conflicting shift
+        echo "\nAdding conflicting shift:\n";
+        $conflicting_shift = new Shift("Tuesday", "11:00", "15:00", "Host");
+        echo $staff1->assignShift($conflicting_shift);
+        echo "StaffMember after adding a shift:\n";
+        echo $staff1->getDetails() . "\n";  
+
 
     }
 }
