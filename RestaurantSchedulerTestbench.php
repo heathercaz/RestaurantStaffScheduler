@@ -7,23 +7,32 @@ class RestaurantSchedulerTestbench
     public function run()
     {
         // Create a Shift
-        $shift = new Shift("Monday", "09:00", "17:00", "Waiter");
+        $shift1 = new Shift("Monday", "09:00", "17:00", "Waiter");
+        $shift2 = new Shift("Tuesday", "08:00", "12:00", "Waiter");
 
         // Create a StaffMember
-        $staff = new StaffMember("Alice Smith", "Waiter", array("Name" => "Alice Smith","Phone" => "123-456-7890", "Email" => "alicesmith@gmail.com"), shift: $shift);
+        $staff1 = new StaffMember("Alice Smith", "Waiter", array("Name" => "Alice Smith","Phone" => "123-456-7890", "Email" => "alicesmith@gmail.com"), shifts: array($shift1));
 
         // Output StaffMember details
         echo "StaffMember Details:\n";
-        echo "Name: " . $staff->name . "\n";
-        echo "Role: " . $staff->role . "\n";
-        echo "Contact Info: " . $staff->contact_info . "\n\n";
+        echo "Name: " . $staff1->name . "\n";
+        echo "Role: " . $staff1->role . "\n";
+        echo "Contact Info: " .implode(',', $staff1->contact_info). "\n\n";
 
         // Output Shift details
         echo "Shift Details:\n";
-        echo "Day: " . $shift->day . "\n";
-        echo "Start Time: " . $shift->start_time . "\n";
-        echo "End Time: " . $shift->end_time . "\n";
-        echo "Assigned Role: " . $shift->assigned_role . "\n";
+        echo "Day: " . $shift1->day . "\n";
+        echo "Start Time: " . $shift1->start_time . "\n";
+        echo "End Time: " . $shift1->end_time . "\n";
+        echo "Assigned Role: " . $shift1->assigned_role . "\n";
+
+        // Assign a new shift to the staff member
+        $staff1->assignShift($shift2);
+
+        echo "StaffMember after assigning new shift:\n";
+        echo $staff1->getDetails() . "\n";
+
+
     }
 }
 
