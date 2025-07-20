@@ -64,6 +64,9 @@ class Shift
     public function setShiftDetails(string $day, string $start_time, string $end_time, string $assigned_role): void
     {
         $this->day = $day;
+        $this->start_time = $start_time;
+        $this->end_time = $end_time;
+        $this->assigned_role = $assigned_role;
     }
 
     public function __toString(): string

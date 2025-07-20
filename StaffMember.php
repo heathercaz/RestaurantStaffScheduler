@@ -1,16 +1,21 @@
 <?php
 
+require_once 'Shift.php';
+
 class StaffMember
 {
     public string $name;
     public string $role;
-    public string $contact_info;
+    public array $contact_info;
 
-    public function __construct(string $name, string $role, string $contact_info)
+    public Shift $shift;
+
+    public function __construct(string $name, string $role, array $contact_info, Shift $shift)
     {
         $this->name = $name;
         $this->role = $role;
         $this->contact_info = $contact_info;
+        $this->shift = $shift;
     }
 
     public function getName(): string
@@ -33,26 +38,28 @@ class StaffMember
         $this->role = $role;
     }
 
-    public function getContactInfo(): string
+    public function getContactInfo(): array
     {
         return $this->contact_info;
     }  
     
-    public function setContactInfo(string $contact_info): void
+    public function setContactInfo(array $contact_info): void
     {
         $this->contact_info = $contact_info;
     }
 
     public function getDetails(): string
     {
-        return "Name: {$this->name}, Role: {$this->role}, Contact: {$this->contact_info}";
+        $contact_info_str = implode(', ', $this->contact_info);
+        return "Name: {$this->name}, Role: {$this->role}, Contact: {$contact_info_str}, Shift: {$this->shift->getDetails()}";
     }
 
-    public function setStaffMemberDetails(string $name, string $role, string $contact_info): void
+    public function setStaffMemberDetails(string $name, string $role, array $contact_info, Shift $shift): void
     {
         $this->name = $name;
         $this->role = $role;
         $this->contact_info = $contact_info;
+        $this->shift = $shift;
     }
 
 
@@ -65,7 +72,5 @@ class StaffMember
     {
         return $this->getDetails();
     }   
-
-
 
 }
