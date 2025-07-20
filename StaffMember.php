@@ -7,7 +7,6 @@ class StaffMember
     public string $name;
     public string $role;
     public array $contact_info;
-
     public Shift $shift;
 
     public function __construct(string $name, string $role, array $contact_info, Shift $shift)
@@ -62,9 +61,9 @@ class StaffMember
         $this->shift = $shift;
     }
 
-
     public function assignShift(Shift $shift): string
     {
+        $this->shift = $shift;
         return "{$this->name} has been assigned to a shift on {$shift->day} from {$shift->start_time} to {$shift->end_time} as a {$shift->assigned_role}.";
     }
 
