@@ -46,25 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         ]);
         exit;
     }
-
-    // Remove staff logic
-    else if (isset($data->removeStaff) && $data->removeStaff && isset($data->name)) {
-        // Remove staff member by name (case-insensitive)
-        $staffMembers = array_values(array_filter($staffMembers, function($s) use ($data) {
-            return (
-                (isset($s['name']) && $s['name'] !== $data->name)
-            ) || (!isset($s['name']));
-        }));
-        file_put_contents($staffFile, json_encode($staffMembers, JSON_PRETTY_PRINT));
-        echo json_encode([
-            "status" => "success",
-            "message" => "Staff member removed.",
-            "staffMembers" => $staffMembers
-        ]);
-        exit;
-    }
-
-    else if ($data->name) {
+    else if (isset($data->name) && isset($data->role) && isset($data->contact_info)) {
 
         // Otherwise, add a staff member
         $name = $data->name ?? '';
@@ -88,7 +70,25 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         ];
 
         echo json_encode($response);
-    } else {
+    } 
+    // Remove staff logic
+    else if (isset($data->removeStaff) && $data->removeStaff && isset($data->name)) {
+        // Remove staff member by name
+        $staffMembers = array_values(array_filter($staffMembers, function($s) use ($data) {
+            return (
+                isset($s['name']) && $s['name'] !== $data->name
+            ) || (!isset($s['name']));
+        }));
+        file_put_contents($staffFile, json_encode($staffMembers, JSON_PRETTY_PRINT));
+        echo json_encode([
+            "status" => "success",
+            "message" => "Staff member removed.",
+            "staffMembers" => $staffMembers
+        ]);
+        exit;
+    }
+    // If no valid data is provided
+    else {
         echo json_encode(["status" => "error", "message" => "Invalid staff data."]);
     }
 } else if ($_SERVER["REQUEST_METHOD"] === 'GET') {
