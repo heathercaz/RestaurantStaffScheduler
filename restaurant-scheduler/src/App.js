@@ -97,6 +97,24 @@ function App() {
     return 0;
   });
 
+  // Add this function to handle staff removal
+  const handleRemoveStaff = async (staffName) => {
+    if (!window.confirm(`Remove staff member "${staffName}"?`)) return;
+    try {
+      const response = await axios.post('http://localhost/php-backend/index.php', {
+        removeStaff: true,
+        name: staffName
+      });
+      if (response.data.staffMembers) {
+        setStaffList(response.data.staffMembers);
+        setResp(`Removed staff member: ${staffName}`);
+      }
+    } catch (err) {
+      setResp("Failed to remove staff member.");
+      console.error(err);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Heather's Restaurant Scheduler</h1>
@@ -246,8 +264,24 @@ function App() {
       <h2>All Staff</h2>
       <ul style={{ listStyleType: 'none' }}>
         {sortedStaffList.map((staff, idx) => (
-          <li key={idx}>
-            <strong>{staff.name}</strong> - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}
+          <li key={idx} style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ flex: 1 }}>
+              <strong>{staff.name}</strong> - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}
+            </span>
+            <span
+              style={{
+                color: '#f67280',
+                marginLeft: 12,
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '1.2em',
+                userSelect: 'none'
+              }}
+              title="Remove staff member"
+              onClick={() => handleRemoveStaff(staff.name)}
+            >
+              ×
+            </span>
           </li>
         ))}
       </ul>
