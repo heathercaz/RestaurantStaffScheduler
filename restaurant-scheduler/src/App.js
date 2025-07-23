@@ -70,6 +70,27 @@ function App() {
     if (response.data.shiftList) setShiftList(response.data.shiftList);
   };
 
+  // Helper to sort shifts by day of week
+  const dayOrder = [
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  ];
+
+  function getDayIndex(day) {
+    return dayOrder.indexOf(day);
+  }
+
+  const sortedShiftList = [...shiftList].sort((a, b) => {
+    return getDayIndex(a.day) - getDayIndex(b.day);
+  });
+
+  // Sort staff alphabetically by name
+  const sortedStaffList = [...staffList].sort((a, b) => {
+    if (a.name && b.name) {
+      return a.name.localeCompare(b.name);
+    }
+    return 0;
+  });
+
   return (
     <div className="App">
       <h1>Heather's Restaurant Scheduler</h1>
@@ -99,11 +120,16 @@ function App() {
           <br />
           <label>
             Role:
-            <input
-              type="text"
+            <select
               value={role}
               onChange={e => setRole(e.target.value)}
-            />
+            >
+              <option value="">Select Role</option>
+              <option value="Cook">Cook</option>
+              <option value="Dishwasher">Dishwasher</option>
+              <option value="Host">Host</option>
+              <option value="Waiter">Waiter</option>
+            </select>
           </label>
           <br />
           <label>
@@ -166,11 +192,16 @@ function App() {
           <br />
           <label>
             Assigned Role:
-            <input
-              type="text"
+            <select
               value={assignedRole}
               onChange={e => setAssignedRole(e.target.value)}
-            />
+            >
+              <option value="">Select Role</option>
+              <option value="Cook">Cook</option>
+              <option value="Dishwasher">Dishwasher</option>
+              <option value="Host">Host</option>
+              <option value="Waiter">Waiter</option>
+            </select>
           </label>
           <br />
           <label>
@@ -192,13 +223,13 @@ function App() {
         </form>
       )}
       {resp && (
-        <p>You entered: {resp}</p>
+        <p>{resp}</p>
       )}
 
       {/* Section: List all shifts and assigned staff */}
       <h2>All Shifts</h2>
       <ul style={{listStyleType: 'none'}}>
-        {shiftList.map((shift, idx) => (
+        {sortedShiftList.map((shift, idx) => (
           <li key={idx}>
             <strong>{shift.day}</strong>: {shift.start_time} - {shift.end_time}, Role: {shift.assigned_role}, Staff: {shift.staff}
           </li>
@@ -208,7 +239,7 @@ function App() {
       {/* Section: List all staff */}
       <h2>All Staff</h2>
       <ul style={{listStyleType: 'none'}}>
-        {staffList.map((staff, idx) => (
+        {sortedStaffList.map((staff, idx) => (
           <li key={idx}>
             <strong>{staff.name}</strong> - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}
           </li>
