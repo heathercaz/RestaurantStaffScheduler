@@ -74,6 +74,8 @@ Backend:
   - Handling of repeat staff and shifts
   - Esure the staff's shifts don't conflict
   - Ability to set number of roles needed per shift and fill them
+  - Ability to remove Staff and Shifts
+  - Ability to edit Staff and Shifts
   - Store data in a database rather than JSON files
 
 Frontend:
