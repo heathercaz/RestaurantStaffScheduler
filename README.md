@@ -34,7 +34,7 @@ A web application for managing restaurant staff and scheduling shifts.
     ```
 3. Set up the PHP backend:
     - Place the `php-backend` folder in your PHP server's root directory (e.g., `htdocs` for XAMPP).
-    - Ensure `staff.json` and `shift.json` exist and are writable.
+    - Ensure `staff.json` and `shifts.json` exist and are writable.
 
 ### Running the App
 
