@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
@@ -18,37 +18,23 @@ function App() {
   const [assignedRole, setAssignedRole] = useState('');
   const [selectedStaff, setSelectedStaff] = useState('');
 
-  // Example staff list for dropdown (replace with backend data if needed)
-  const [staffList, setStaffList] = useState([
-    { name: 'Alice Smith', 
-      role: 'Waiter', 
-      phone_num: '123-456-7890', 
-      email: "alice@alice.ca"
-    },
-    { name: 'Bob Jones',
-      role: 'Chef', 
-      phone_num: '987-654-3210', 
-      email: "bob@bob.ca"
-    }
-  ]);
+  // Staff and shift lists
+  const [staffList, setStaffList] = useState([]);
+  const [shiftList, setShiftList] = useState([]);
 
-  // Example shift list for display (replace with backend data if needed)
-  const [shiftList, setShiftList] = useState([
-    {
-      day: 'Tuesday',
-      start_time: '08:00',
-      end_time: '12:00',
-      assigned_role: 'Waiter',
-      staff: 'Alice Smith'
-    },
-    {
-      day: 'Wednesday',
-      start_time: '10:00',
-      end_time: '14:00',
-      assigned_role: 'Chef',
-      staff: 'Bob Jones'
-    }
-  ]);
+  // Initialize app data on refresh
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get('http://localhost/php-backend/index.php');
+        if (res.data.staffMembers) setStaffList(res.data.staffMembers);
+        if (res.data.shiftList) setShiftList(res.data.shiftList);
+      } catch (err) {
+        console.error("Failed to fetch initial data:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,37 +43,31 @@ function App() {
       phone_num: phoneNum,
       email: email
     };
-    console.log("Submitting:", { name, role, contact_info });
     const response = await axios.post('http://localhost/php-backend/index.php', { name, role, contact_info });
-    console.log(response);
-    setResp(response.data.message); // Assuming the first staff member is the one just added
+    setResp(response.data.message);
     setName('');
     setRole('');
     setPhoneNum('');
     setEmail('');
     setShowForm(false);
 
-    console.log("Staff members from response:", response.data.staffMembers);
     // Fill staffList with staff members from response.data if available
-    setStaffList(response.data.staffMembers);
-
-    console.log("Updated staff list:", staffList);
+    if (response.data.staffMembers) {
+      setStaffList(response.data.staffMembers);
+    }
   };
 
   const handleShiftSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting shift:", { day, startTime, endTime, assignedRole, selectedStaff });
     const response = await axios.post('http://localhost/php-backend/index.php', { day, startTime, endTime, assignedRole, selectedStaff });
-    console.log(response);
-    setResp(response.data.message); // Assuming the first staff member is the one just added
-    // Send shift data to backend if needed
+    setResp(response.data.message);
     setDay('');
     setStartTime('');
     setEndTime('');
     setAssignedRole('');
     setSelectedStaff('');
     setShowShiftForm(false);
-    setShiftList(response.data.shiftList); // Assuming response contains the updated shift list
+    if (response.data.shiftList) setShiftList(response.data.shiftList);
   };
 
   return (
@@ -231,8 +211,8 @@ function App() {
         {staffList.map((staff, idx) => (
           <li key={idx}>
             <strong>{staff.name}</strong> - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}
-          </li> 
-          ))}
+          </li>
+        ))}
       </ul>
     </div>
   );
