@@ -6,8 +6,9 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Path to staff.json file
+// Path to staff.json and shift.json files
 $staffFile = 'staff.json';
+$shiftFile = 'shift.json';
 
 // Load existing staff members from staff.json
 if (file_exists($staffFile)) {
@@ -16,33 +17,67 @@ if (file_exists($staffFile)) {
     $staffMembers = [];
 }
 
+// Load existing shifts from shift.json
+if (file_exists($shiftFile)) {
+    $shiftList = json_decode(file_get_contents($shiftFile), true) ?? [];
+} else {
+    $shiftList = [];
+}
+
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $data = json_decode(file_get_contents('php://input'));
-    $name = $data->name;
-    $role = $data->role;
-    $contact_info = $data->contact_info;
 
-    // Create new staff member array
-    $newStaffMember = [
-        "Name" => $name,
-        "Role" => $role,
-        "Phone" => $contact_info->phone_num,
-        "Email" => $contact_info->email
-    ];
+    // If shift data is present, add a shift
+    if (isset($data->startTime) && isset($data->endTime) && isset($data->assignedRole) && isset($data->selectedStaff)) {
+        $newShift = [
+            "day" => $data->day ?? "",
+            "start_time" => $data->startTime,
+            "end_time" => $data->endTime,
+            "assigned_role" => $data->assignedRole,
+            "staff" => $data->selectedStaff
+        ];
+        $shiftList[] = $newShift;
+        file_put_contents($shiftFile, json_encode($shiftList, JSON_PRETTY_PRINT));
+        echo json_encode([
+            "status" => "success",
+            "message" => "Shift added.",
+            "shiftList" => $shiftList
+        ]);
+        exit;
+    }
 
-    // Add to staff members array
-    $staffMembers[] = $newStaffMember;
+    // Otherwise, add a staff member
+    $name = $data->name ?? '';
+    $role = $data->role ?? '';
+    $contact_info = $data->contact_info ?? null;
 
-    // Save updated staff members to staff.json
-    file_put_contents($staffFile, json_encode($staffMembers, JSON_PRETTY_PRINT));
+    if ($name && $role && $contact_info) {
+        $newStaffMember = [
+            "Name" => $name,
+            "Role" => $role,
+            "Phone" => $contact_info->phone_num,
+            "Email" => $contact_info->email
+        ];
 
-    $response = [
-        "status" => "success",
-        "message" => "Staff member added: $name\n Role: $role\n Phone Number: $contact_info->phone_num\n Email: $contact_info->email\n Staff Count: " . count($staffMembers),
-        "staffMembers" => $staffMembers
-    ];
+        $staffMembers[] = $newStaffMember;
+        file_put_contents($staffFile, json_encode($staffMembers, JSON_PRETTY_PRINT));
 
-    echo json_encode($response);
+        $response = [
+            "status" => "success",
+            "message" => "Staff member added: $name\n Role: $role\n Phone Number: {$contact_info->phone_num}\n Email: {$contact_info->email}\n Staff Count: " . count($staffMembers),
+            "staffMembers" => $staffMembers
+        ];
+
+        echo json_encode($response);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Invalid staff data."]);
+    }
+} else if ($_SERVER["REQUEST_METHOD"] === 'GET') {
+    // Return both staff and shift data if requested
+    echo json_encode([
+        "staffMembers" => $staffMembers,
+        "shiftList" => $shiftList
+    ]);
 } else {
     echo json_encode(["status" => "error", "message" => "Error Occured."]);
 }

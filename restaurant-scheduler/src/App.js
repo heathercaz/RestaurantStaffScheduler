@@ -7,11 +7,12 @@ function App() {
   const [role, setRole] = useState('');
   const [phoneNum, setPhoneNum] = useState('');
   const [email, setEmail] = useState('');
-  const [submittedName, setResp] = useState('');
+  const [resp, setResp] = useState('');
   const [showForm, setShowForm] = useState(false);
 
   // Shift form state
   const [showShiftForm, setShowShiftForm] = useState(false);
+  const [day, setDay] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [assignedRole, setAssignedRole] = useState('');
@@ -19,7 +20,6 @@ function App() {
 
   // Example staff list for dropdown (replace with backend data if needed)
   const [staffList, setStaffList] = useState([]);
-  const foo = "bar";
 
   // Example shift list for display (replace with backend data if needed)
   const [shiftList, setShiftList] = useState([
@@ -67,8 +67,12 @@ function App() {
 
   const handleShiftSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting shift:", { startTime, endTime, assignedRole, selectedStaff });
+    console.log("Submitting shift:", { day, startTime, endTime, assignedRole, selectedStaff });
+    const response = await axios.post('http://localhost/php-backend/index.php', { day, startTime, endTime, assignedRole, selectedStaff });
+    console.log(response);
+    setResp(response.data.message); // Assuming the first staff member is the one just added
     // Send shift data to backend if needed
+    setDay('');
     setStartTime('');
     setEndTime('');
     setAssignedRole('');
@@ -136,6 +140,15 @@ function App() {
       {showShiftForm && (
         <form onSubmit={handleShiftSubmit}>
           <label>
+            Day:
+            <input
+              type="text"
+              value={day}
+              onChange={e => setDay(e.target.value)}
+            />
+          </label>
+          <br/>
+          <label>
             Start Time:
             <input
               type="text"
@@ -180,8 +193,8 @@ function App() {
           <button type="submit">Submit Shift</button>
         </form>
       )}
-      {submittedName && (
-        <p>You entered: {submittedName}</p>
+      {resp && (
+        <p>You entered: {resp}</p>
       )}
 
       {/* Section: List all shifts and assigned staff */}
