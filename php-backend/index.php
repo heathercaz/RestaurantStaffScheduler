@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $data = json_decode(file_get_contents('php://input'));
 
     // If shift data is present, add a shift
-    if (isset($data->day)) {
+    if (isset($data->day) && !isset($data->removeShift)) {
         $newShift = [
             "day" => $data->day,
             "start_time" => $data->startTime,
@@ -84,6 +84,25 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             "status" => "success",
             "message" => "Staff member removed.",
             "staffMembers" => $staffMembers
+        ]);
+        exit;
+    }
+    // Remove shift logic
+    else if (isset($data->removeShift) && $data->removeShift) {
+        $shiftList = array_values(array_filter($shiftList, function($s) use ($data) {
+            return !(
+                $s['day'] === $data->day &&
+                $s['start_time'] === $data->start_time &&
+                $s['end_time'] === $data->end_time &&
+                $s['assigned_role'] === $data->assigned_role &&
+                $s['staff'] === $data->staff
+            );
+        }));
+        file_put_contents($shiftFile, json_encode($shiftList, JSON_PRETTY_PRINT));
+        echo json_encode([
+            "status" => "success",
+            "message" => "Shift removed.",
+            "shiftList" => $shiftList
         ]);
         exit;
     }
