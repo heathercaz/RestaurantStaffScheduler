@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
+
+  // Staff form state
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
   const [phoneNum, setPhoneNum] = useState('');
@@ -36,6 +38,7 @@ function App() {
     fetchData();
   }, []);
 
+  // Handle add staff submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const contact_info = {
@@ -57,7 +60,7 @@ function App() {
     }
   };
 
-  // 
+  // Handle add shift submission
   const handleShiftSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.post('http://localhost/php-backend/index.php', { day, startTime, endTime, assignedRole, selectedStaff });
@@ -76,10 +79,12 @@ function App() {
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
   ];
 
+  // Function to get index of day in the dayOrder array
   function getDayIndex(day) {
     return dayOrder.indexOf(day);
   }
 
+  // Sort shifts by day of the week
   const sortedShiftList = [...shiftList].sort((a, b) => {
     return getDayIndex(a.day) - getDayIndex(b.day);
   });
