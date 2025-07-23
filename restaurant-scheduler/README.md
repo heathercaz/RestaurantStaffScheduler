@@ -69,10 +69,18 @@ restaurant-scheduler/
   └── README.md
 ```
 
-## License
+## Features to be added
+Backend:
+    Handling of repeat staff and shifts
+    Esure the staff's shifts don't conflict
+    Ability to set number of roles needed per shift and fill them
+    Store data in a database rather than JSON files
 
-MIT
+Frontend:
+    Click on staff member to assign shift to them
+    Sort Shifts by day and time, list each staff member + role for each shift
+    Better interface for selecting day and time like a calendar and dropdown 
 
 ## Author
 
-Your
+Heather Caswell
