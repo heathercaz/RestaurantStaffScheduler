@@ -19,7 +19,18 @@ function App() {
   const [selectedStaff, setSelectedStaff] = useState('');
 
   // Example staff list for dropdown (replace with backend data if needed)
-  const [staffList, setStaffList] = useState([]);
+  const [staffList, setStaffList] = useState([
+    { name: 'Alice Smith', 
+      role: 'Waiter', 
+      phone_num: '123-456-7890', 
+      email: "alice@alice.ca"
+    },
+    { name: 'Bob Jones',
+      role: 'Chef', 
+      phone_num: '987-654-3210', 
+      email: "bob@bob.ca"
+    }
+  ]);
 
   // Example shift list for display (replace with backend data if needed)
   const [shiftList, setShiftList] = useState([
@@ -58,9 +69,7 @@ function App() {
 
     console.log("Staff members from response:", response.data.staffMembers);
     // Fill staffList with staff members from response.data if available
-    if (response.data.staffMembers) {
-      setStaffList(response.data.staffMembers);
-    }
+    setStaffList(response.data.staffMembers);
 
     console.log("Updated staff list:", staffList);
   };
@@ -78,6 +87,7 @@ function App() {
     setAssignedRole('');
     setSelectedStaff('');
     setShowShiftForm(false);
+    setShiftList(response.data.shiftList); // Assuming response contains the updated shift list
   };
 
   return (
@@ -141,11 +151,19 @@ function App() {
         <form onSubmit={handleShiftSubmit}>
           <label>
             Day:
-            <input
-              type="text"
+            <select
               value={day}
               onChange={e => setDay(e.target.value)}
-            />
+            >
+              <option value="">Select Day</option>
+              <option value="Monday">Monday</option>
+              <option value="Tuesday">Tuesday</option>
+              <option value="Wednesday">Wednesday</option>
+              <option value="Thursday">Thursday</option>
+              <option value="Friday">Friday</option>
+              <option value="Saturday">Saturday</option>
+              <option value="Sunday">Sunday</option>
+            </select>
           </label>
           <br/>
           <label>
@@ -199,7 +217,7 @@ function App() {
 
       {/* Section: List all shifts and assigned staff */}
       <h2>All Shifts</h2>
-      <ul>
+      <ul style={{listStyleType: 'none'}}>
         {shiftList.map((shift, idx) => (
           <li key={idx}>
             <strong>{shift.day}</strong>: {shift.start_time} - {shift.end_time}, Role: {shift.assigned_role}, Staff: {shift.staff}
@@ -209,15 +227,13 @@ function App() {
 
       {/* Section: List all staff */}
       <h2>All Staff</h2>
-      <ul>
+      <ul style={{listStyleType: 'none'}}>
         {staffList.map((staff, idx) => (
           <li key={idx}>
-            {staff.name} - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}
+            <strong>{staff.name}</strong> - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}
           </li> 
           ))}
       </ul>
-      <h3>Raw Staff Array</h3>
-      <pre>{JSON.stringify(staffList)}</pre>
     </div>
   );
 }
