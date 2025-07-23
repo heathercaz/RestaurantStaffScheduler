@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function App() {
+
+  // Staff form state
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
   const [phoneNum, setPhoneNum] = useState('');
@@ -36,6 +38,7 @@ function App() {
     fetchData();
   }, []);
 
+  // Handle add staff submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     const contact_info = {
@@ -57,6 +60,7 @@ function App() {
     }
   };
 
+  // Handle add shift submission
   const handleShiftSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.post('http://localhost/php-backend/index.php', { day, startTime, endTime, assignedRole, selectedStaff });
@@ -75,10 +79,12 @@ function App() {
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
   ];
 
+  // Function to get index of day in the dayOrder array
   function getDayIndex(day) {
     return dayOrder.indexOf(day);
   }
 
+  // Sort shifts by day of the week
   const sortedShiftList = [...shiftList].sort((a, b) => {
     return getDayIndex(a.day) - getDayIndex(b.day);
   });
@@ -95,13 +101,13 @@ function App() {
     <div className="App">
       <h1>Heather's Restaurant Scheduler</h1>
       <button
-        style={{fontSize: '1.2em', marginRight: '10px'}}
+        style={{ fontSize: '1.2em', marginRight: '10px' }}
         onClick={() => { setShowForm(true); setShowShiftForm(false); }}
       >
         + Add Staff
       </button>
       <button
-        style={{fontSize: '1.2em'}}
+        style={{ fontSize: '1.2em' }}
         onClick={() => { setShowShiftForm(true); setShowForm(false); }}
       >
         + Add Shift
@@ -171,7 +177,7 @@ function App() {
               <option value="Sunday">Sunday</option>
             </select>
           </label>
-          <br/>
+          <br />
           <label>
             Start Time:
             <input
@@ -228,7 +234,7 @@ function App() {
 
       {/* Section: List all shifts and assigned staff */}
       <h2>All Shifts</h2>
-      <ul style={{listStyleType: 'none'}}>
+      <ul style={{ listStyleType: 'none' }}>
         {sortedShiftList.map((shift, idx) => (
           <li key={idx}>
             <strong>{shift.day}</strong>: {shift.start_time} - {shift.end_time}, Role: {shift.assigned_role}, Staff: {shift.staff}
@@ -238,7 +244,7 @@ function App() {
 
       {/* Section: List all staff */}
       <h2>All Staff</h2>
-      <ul style={{listStyleType: 'none'}}>
+      <ul style={{ listStyleType: 'none' }}>
         {sortedStaffList.map((staff, idx) => (
           <li key={idx}>
             <strong>{staff.name}</strong> - {staff.role}, Phone: {staff.phone_num}, Email: {staff.email}

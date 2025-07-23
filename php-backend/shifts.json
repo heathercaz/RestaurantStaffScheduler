@@ -1,0 +1,44 @@
+[
+    {
+        "day": "Saturday",
+        "start_time": "4:00",
+        "end_time": "12:00",
+        "assigned_role": "Dishwasher",
+        "staff": "Alex"
+    },
+    {
+        "day": "Tuesday",
+        "start_time": "9:00",
+        "end_time": "10:00",
+        "assigned_role": "Cook",
+        "staff": "Bob"
+    },
+    {
+        "day": "Monday",
+        "start_time": "7:00",
+        "end_time": "3:00",
+        "assigned_role": "Waiter",
+        "staff": "Barry"
+    },
+    {
+        "day": "Thursday",
+        "start_time": "8:00",
+        "end_time": "13:00",
+        "assigned_role": "Waiter",
+        "staff": "Gary"
+    },
+    {
+        "day": "Wednesday",
+        "start_time": "9:00",
+        "end_time": "17:00",
+        "assigned_role": "Dishwasher",
+        "staff": "Barry"
+    },
+    {
+        "day": "Friday",
+        "start_time": "17:00",
+        "end_time": "23:00",
+        "assigned_role": "Cook",
+        "staff": "Alex"
+    }
+]

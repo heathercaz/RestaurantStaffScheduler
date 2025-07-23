@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Bob",
+        "role": "Host",
+        "phone_num": "123-456-7890",
+        "email": "bob@bob.ca"
+    },
+    {
+        "name": "Barry",
+        "role": "Dishwasher",
+        "phone_num": "756-473-6384",
+        "email": "barry@barry.ca"
+    },
+    {
+        "name": "Kim",
+        "role": "Waiter",
+        "phone_num": "123-123-4123",
+        "email": "kim@kim.ca"
+    },
+    {
+        "name": "Gary",
+        "role": "Waiter",
+        "phone_num": "111-222-3333",
+        "email": "Gary@Garrett.ca"
+    },
+    {
+        "name": "Alex",
+        "role": "Cook",
+        "phone_num": "108-293-9282",
+        "email": "alex@alexander.com"
+    }
+]
