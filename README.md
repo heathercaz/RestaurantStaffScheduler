@@ -31,6 +31,7 @@ A web application for managing restaurant staff and scheduling shifts.
     ```bash
     cd restaurant-scheduler
     npm install
+    npm install axios
     ```
 3. Set up the PHP backend:
     - Place the `php-backend` folder in your PHP server's root directory (e.g., `htdocs` for XAMPP).
