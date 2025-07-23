@@ -115,6 +115,30 @@ function App() {
     }
   };
 
+  // Add this function to handle shift removal
+  const handleRemoveShift = async (shiftToRemove) => {
+    if (!window.confirm(
+      `Remove shift for ${shiftToRemove.staff} on ${shiftToRemove.day} (${shiftToRemove.start_time} - ${shiftToRemove.end_time})?`
+    )) return;
+    try {
+      const response = await axios.post('http://localhost/php-backend/index.php', {
+        removeShift: true,
+        day: shiftToRemove.day,
+        start_time: shiftToRemove.start_time,
+        end_time: shiftToRemove.end_time,
+        assigned_role: shiftToRemove.assigned_role,
+        staff: shiftToRemove.staff
+      });
+      if (response.data.shiftList) {
+        setShiftList(response.data.shiftList);
+        setResp("Removed shift.");
+      }
+    } catch (err) {
+      setResp("Failed to remove shift.");
+      console.error(err);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Heather's Restaurant Scheduler</h1>
@@ -254,8 +278,24 @@ function App() {
       <h2>All Shifts</h2>
       <ul style={{ listStyleType: 'none' }}>
         {sortedShiftList.map((shift, idx) => (
-          <li key={idx}>
-            <strong>{shift.day}</strong>: {shift.start_time} - {shift.end_time}, Role: {shift.assigned_role}, Staff: {shift.staff}
+          <li key={idx} style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ flex: 1 }}>
+              <strong>{shift.day}</strong>: {shift.start_time} - {shift.end_time}, Role: {shift.assigned_role}, Staff: {shift.staff}
+            </span>
+            <span
+              style={{
+                color: '#f67280',
+                marginLeft: 12,
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '1.2em',
+                userSelect: 'none'
+              }}
+              title="Remove shift"
+              onClick={() => handleRemoveShift(shift)}
+            >
+              ×
+            </span>
           </li>
         ))}
       </ul>
