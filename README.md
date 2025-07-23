@@ -46,7 +46,7 @@ A web application for managing restaurant staff and scheduling shifts.
   (Runs on [http://localhost:3000](http://localhost:3000))
 
 - **Backend:**  
-  Start your PHP server and ensure it serves the backend files at `http://localhost/php-backend/`.
+  Start your PHP server and ensure it serves the backend files at `http://localhost/php-backend/`. (e.g., start Apache on XAMPP)
 
 ## Usage
 
