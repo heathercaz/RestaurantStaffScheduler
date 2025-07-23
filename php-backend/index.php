@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
 
         $response = [
             "status" => "success",
-            "message" => "Staff member added: $name\n Role: $role\n Phone Number: {$contact_info->phone_num}\n Email: {$contact_info->email}\n Staff Count: " . count($staffMembers),
+            "message" => "Staff member added: $name\n Role: $role\n Phone Number: {$contact_info->phone_num}\n Email: {$contact_info->email}\n ",
             "staffMembers" => $staffMembers
         ];
 
